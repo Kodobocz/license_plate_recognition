@@ -11,7 +11,7 @@ pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tessera
 
 
 #Reading and resizing image
-image = cv2.imread(".\data\image2.jpg")
+image = cv2.imread(".\data\image20.jpg")
 image = imutils.resize(image, width=500)
 cv2.imshow("Original Image", image)
 TestWaitKey()
@@ -27,7 +27,7 @@ cv2.imshow("Smoother Image", gray)
 TestWaitKey()
 
 # Make edges more defined  -->szakadozottsághoz állít, alacsony treshold alatti off, 2treshold között akkor, ha összeköt 2 erős kontúrt, semmi közepén eldob
-edged = cv2.Canny(gray, 170, 200)
+edged = cv2.Canny(gray, 100, 150)
 cv2.imshow("Canny edge", edged)
 TestWaitKey()
 
@@ -54,19 +54,21 @@ count = 0
 name = 1
 
 # Finding the number plate
-for i in cnts:
-    perimeter = cv2.arcLength(i, True)
-    approx = cv2.approxPolyDP(i, 0.02 * perimeter, True) #approxpoly->finding shape
+for cnt in cnts:
+    perimeter = cv2.arcLength(cnt, True)
+    approx = cv2.approxPolyDP(cnt, 0.02 * perimeter, True) #approxpoly->finding shape
     if len(approx) == 4:
         NumberPlateCount = approx
-        x, y, w, h = cv2.boundingRect(i)
-        crp_img = image[y:y + h, x:x + w]
+        x, y, w, h = cv2.boundingRect(cnt)
+        crp_img = image[y-10 : y + h+5, x-10 : x + w+5]
         cv2.imwrite(str(name) + '.png', crp_img)
         name += 1
 
         break
 
-# Drawing the contour on the main image
+
+
+        # Drawing the contour on the main image
 cv2.drawContours(image, [NumberPlateCount], -1, (0, 255, 0), 3)
 cv2.imshow("Final Image", image)
 TestWaitKey()
@@ -78,7 +80,7 @@ TestWaitKey()
 
 # Reding the number plate
 text = pytesseract.image_to_string(crop_img_loc, lang='eng')
-print("Number is : ", text)
 text = ''.join(e for e in text if e.isalnum())
+print("Number is : ", text)
 
 TestWaitKey()
