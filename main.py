@@ -6,12 +6,10 @@ from functions import TestWaitKey
 
 #Download and set route
 #https://digi.bib.uni-mannheim.de/tesseract/tesseract-ocr-w64-setup-v5.3.0.20221214.exe
-
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
-
 #Reading and resizing image
-image = cv2.imread(".\data\image20.jpg")
+image = cv2.imread(".\data\image1.jpg")
 image = imutils.resize(image, width=500)
 cv2.imshow("Original Image", image)
 TestWaitKey()
@@ -67,8 +65,7 @@ for cnt in cnts:
         break
 
 
-
-        # Drawing the contour on the main image
+# Drawing the contour on the main image
 cv2.drawContours(image, [NumberPlateCount], -1, (0, 255, 0), 3)
 cv2.imshow("Final Image", image)
 TestWaitKey()
@@ -76,11 +73,4 @@ TestWaitKey()
 # Cutting out the number plate
 crop_img_loc = '1.png'
 cv2.imshow("Cropped Image", cv2.imread(crop_img_loc))
-TestWaitKey()
-
-# Reding the number plate
-text = pytesseract.image_to_string(crop_img_loc, lang='eng')
-text = ''.join(e for e in text if e.isalnum())
-print("Number is : ", text)
-
 TestWaitKey()
