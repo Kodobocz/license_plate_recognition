@@ -77,13 +77,13 @@ while True:
 
     license_plate = cv2.imread(crop_img_loc)
 
-    # Resizing, grayscaling and gaussian bluring the license plate so the chance of successfully reading the text is bigger
+    # Resizing and grayscaling the license plate so the chance of successfully reading the text is bigger
     resized_license_plate = cv2.resize(license_plate, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
     grayscaled_license_plate = cv2.cvtColor(resized_license_plate, cv2.COLOR_BGR2GRAY)
-    gaussian_blured_license_plate = cv2.GaussianBlur(grayscaled_license_plate, (5, 5), 0)
+    show_img("Gaussan", grayscaled_license_plate)
 
     # Reading the text from the preprocessed license plate. specifying the language and characters the plate migth contains
-    plate_text = pytesseract.image_to_string(gaussian_blured_license_plate, lang='eng',config='--oem 3 -l eng --psm 6 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+    plate_text = pytesseract.image_to_string(grayscaled_license_plate, lang='eng',config='--oem 3 -l eng --psm 6 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
 
     if len(plate_text.strip()) == 8:
         plate_text = plate_text[1:]
