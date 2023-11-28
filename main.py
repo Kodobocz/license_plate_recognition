@@ -1,5 +1,9 @@
 import cv2
 import imutils
+import pytesseract
+
+
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 
 # Shows the image, and waits for a key to be pressed
@@ -70,6 +74,28 @@ while True:
     # Cutting out the number plate
     crop_img_loc = f"./result/result_{image_number}.png"
     show_img("Cropped Image", cv2.imread(crop_img_loc))
+
+    license_plate = cv2.imread(crop_img_loc)
+
+    # Resizing, grayscaling and gaussian bluring the license plate so the chance of successfully reading the text is bigger
+    resized_license_plate = cv2.resize(license_plate, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
+    grayscaled_license_plate = cv2.cvtColor(resized_license_plate, cv2.COLOR_BGR2GRAY)
+    gaussian_blured_license_plate = cv2.GaussianBlur(grayscaled_license_plate, (5, 5), 0)
+
+    # Reading the text from the preprocessed license plate. specifying the language and characters the plate migth contains
+    plate_text = pytesseract.image_to_string(gaussian_blured_license_plate, lang='eng',config='--oem 3 -l eng --psm 6 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+
+    if len(plate_text.strip()) == 8:
+        plate_text = plate_text[1:]
+    elif len(plate_text.strip()) == 9:
+        plate_text = plate_text[2:]
+
+    # Check if the result's length is valid
+    if len(plate_text.strip()) >= 6:
+        print("Number Plate Text:", plate_text)
+    else:
+        print("Did not recognize any text on the license plate.")
+
 
     cv2.destroyAllWindows()
 
