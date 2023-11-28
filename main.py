@@ -83,12 +83,11 @@ while True:
     show_img("Gaussan", grayscaled_license_plate)
 
     # Reading the text from the preprocessed license plate. specifying the language and characters the plate migth contains
-    plate_text = pytesseract.image_to_string(grayscaled_license_plate, lang='eng',config='--oem 3 -l eng --psm 6 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+    plate_text = pytesseract.image_to_string(grayscaled_license_plate ,config='--oem 3 -l eng --psm 6 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
 
     if len(plate_text.strip()) == 8:
         plate_text = plate_text[1:]
-    elif len(plate_text.strip()) == 9:
-        plate_text = plate_text[2:]
+
 
     # Check if the result's length is valid
     if len(plate_text.strip()) >= 6:
