@@ -5,7 +5,7 @@ import imutils
 while True:
     #Reading and resizing image
     image_number = input("Enter the number of the image: ")
-    if image_number.isdigit() == False:
+    if not image_number.isdigit():
         break
     elif int(image_number) < 1 or int(image_number) > 24:
         break
