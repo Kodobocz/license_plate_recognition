@@ -1,5 +1,4 @@
 import cv2
-import imutils
 import pytesseract
 
 
@@ -22,7 +21,6 @@ while True:
 
     file_path = f"./data/image{image_number}.jpg"
     originalimage = cv2.imread(file_path)
-    originalimage = imutils.resize(originalimage, width=500)
     show_img("Original Image", originalimage)
 
 
@@ -77,17 +75,15 @@ while True:
 
     license_plate = cv2.imread(crop_img_loc)
 
-    # Resizing and grayscaling the license plate so the chance of successfully reading the text is bigger
-    resized_license_plate = cv2.resize(license_plate, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
-    grayscaled_license_plate = cv2.cvtColor(resized_license_plate, cv2.COLOR_BGR2GRAY)
-    show_img("Gaussan", grayscaled_license_plate)
+    # Grayscaling the license plate
+    grayscaled_license_plate = cv2.cvtColor(license_plate, cv2.COLOR_BGR2GRAY)
+    show_img("Grayscaled plate", grayscaled_license_plate)
 
     # Reading the text from the preprocessed license plate. specifying the language and characters the plate migth contains
     plate_text = pytesseract.image_to_string(grayscaled_license_plate ,config='--oem 3 -l eng --psm 6 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
 
     if len(plate_text.strip()) == 8:
         plate_text = plate_text[1:]
-
 
     # Check if the result's length is valid
     if len(plate_text.strip()) >= 6:
