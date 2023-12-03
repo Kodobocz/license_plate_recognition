@@ -1,5 +1,6 @@
 import cv2
 import pytesseract
+import imutils
 
 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
@@ -21,6 +22,7 @@ while True:
 
     file_path = f"./data/image{image_number}.jpg"
     originalimage = cv2.imread(file_path)
+    originalimage = imutils.resize(originalimage, width=500)
     show_img("Original Image", originalimage)
 
 
