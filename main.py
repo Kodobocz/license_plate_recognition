@@ -13,13 +13,14 @@ def show_img(name, img):
 
 
 while True:
-    # Reading and resizing image
+    # Reading and validating input
     image_number = input("Enter the number of the image: ")
     if not image_number.isdigit():
         break
     elif int(image_number) < 1 or int(image_number) > 24:
         break
 
+    # Reading and resizing image
     file_path = f"./data/image{image_number}.jpg"
     originalimage = cv2.imread(file_path)
     originalimage = imutils.resize(originalimage, width=500)
